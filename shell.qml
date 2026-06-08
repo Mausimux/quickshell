@@ -1,19 +1,34 @@
-import Quickshell // for PanelWindow
-import QtQuick // for Text
+import Quickshell
+import Quickshell.Io
+import QtQuick
 
 PanelWindow {
-  anchors {
-    top: true
-    left: true
-    right: true
-  }
+	anchors {
+		top: true
+		right: true
+	}
 
-  implicitHeight: 30
+	implicitHeight: clock.implicitHeight
+	implicitWidth: clock.implicitWidth
 
-  Text {
-    // center the bar in its parent component (the window)
-    anchors.centerIn: parent
+	Text {
+		id: clock
+		anchors.centerIn: parent
 
-    text: "hello world"
-  }
+		Process {
+			id: dateProc
+			command: ["date"]
+			running: true
+			stdout: StdioCollector {
+				onStreamFinished: clock.text = this.text
+			}
+		}
+
+		Timer {
+			interval: 1000
+			running: true
+			repeat: true
+			onTriggered: dateProc.running = true
+		}
+	}
 }
