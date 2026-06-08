@@ -3,6 +3,8 @@ import Quickshell.Io
 import QtQuick
 
 PanelWindow {
+	id: clockWindow
+
 	anchors {
 		top: true
 		right: true
@@ -30,5 +32,11 @@ PanelWindow {
 			repeat: true
 			onTriggered: dateProc.running = true
 		}
+	}
+
+	IpcHandler {
+		target: 'clockWindow'
+
+		function toggleVisibility(): void {clockWindow.visible = !clockWindow.visible}
 	}
 }
